@@ -14,11 +14,11 @@ const App = () => {
   };
 
   // Logo PNG
-  const LogoImg = ({ size = '40' }) => (
+  const LogoImg = ({ size = '40px' }) => (
     <img 
       src="/zepouce-logo.png" 
       alt="ZePouce" 
-      style={{ width: size, height: size, borderRadius: '20%', objectFit: 'cover' }}
+      style={{ width: size, height: size, borderRadius: '22%', objectFit: 'cover' }}
     />
   );
 
@@ -76,7 +76,7 @@ const App = () => {
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
           <div style={{ marginBottom: '2rem' }}>
-            <LogoImg size="80" />
+            <LogoImg size="90px" />
           </div>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
