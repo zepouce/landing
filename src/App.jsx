@@ -13,24 +13,13 @@ const App = () => {
     }
   };
 
-  // Logo SVG inline
-  const LogoSVG = () => (
-    <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Thumb/finger */}
-      <path d="M35 25C35 15 40 10 50 10C60 10 65 15 65 25V50C65 55 62 60 58 62" stroke="#4CAF7D" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      
-      {/* Road with dashes */}
-      <path d="M50 35L70 45" stroke="#FFB347" strokeWidth="3" strokeDasharray="5,5" strokeLinecap="round"/>
-      <path d="M50 45L70 55" stroke="#FFB347" strokeWidth="3" strokeDasharray="5,5" strokeLinecap="round"/>
-      
-      {/* Road section */}
-      <rect x="30" y="50" width="50" height="15" fill="#4CAF7D" rx="3"/>
-      <line x1="35" y1="57.5" x2="75" y2="57.5" stroke="#FFB347" strokeWidth="2" strokeDasharray="4,3"/>
-      
-      {/* Accent orange */}
-      <circle cx="45" cy="60" r="4" fill="#FF6B35"/>
-      <circle cx="60" cy="68" r="3" fill="#FF6B35"/>
-    </svg>
+  // Logo PNG
+  const LogoImg = ({ size = '40' }) => (
+    <img 
+      src="/zepouce-logo.png" 
+      alt="ZePouce" 
+      style={{ width: size, height: size }}
+    />
   );
 
   return (
@@ -51,7 +40,7 @@ const App = () => {
         boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <LogoSVG />
+          <LogoImg />
           <span style={{ fontSize: '1.5rem', fontWeight: '700', color: '#2D2A26' }}>
             Ze<span style={{ color: '#FF6B35' }}>Pouce</span>
           </span>
@@ -87,7 +76,7 @@ const App = () => {
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
           <div style={{ marginBottom: '2rem' }}>
-            <LogoSVG />
+            <LogoImg size="120" />
           </div>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
