@@ -4,13 +4,17 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
-      setEmailSubmitted(true);
-      setEmail('');
-      setTimeout(() => setEmailSubmitted(false), 3000);
-    }
+    const formData = new FormData(e.target);
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    });
+    setEmailSubmitted(true);
+    setEmail('');
+    setTimeout(() => setEmailSubmitted(false), 3000);
   };
 
   // Logo PNG
@@ -238,13 +242,21 @@ const App = () => {
         }}>
           Sois parmi les premiers à découvrir ZePouce. Inscription gratuite et sans engagement.
         </p>
-        <form onSubmit={handleNewsletterSubmit} style={{
-          display: 'flex',
-          gap: '0.5rem',
-          marginBottom: '1.5rem'
-        }}>
+        <form
+          name="beta-access"
+          method="POST"
+          data-netlify="true"
+          onSubmit={handleNewsletterSubmit}
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            marginBottom: '1.5rem'
+          }}
+        >
+          <input type="hidden" name="form-name" value="beta-access" />
           <input
             type="email"
+            name="email"
             placeholder="ton@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
