@@ -1,40 +1,390 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#FF6B35" />
-    <meta
-      name="description"
-      content="ZePouce - Le partage sans blabla. Connecte les co-voyageurs et automobilistes simplement."
-    />
-    <title>ZePouce - Le partage sans blabla</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      code {
-        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-          monospace;
-      }
-    </style>
-  </head>
-  <body>
-    <noscript>Tu dois activer JavaScript pour utiliser cette app.</noscript>
-    <div id="root"></div>
-    <form name="beta-access" netlify data-netlify="true" hidden>
-      <input type="email" name="email" />
-    </form>
-  </body>
-</html>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZePouce — La mobilité entre voisins</title>
+<meta name="description" content="ZePouce, l'application gratuite et sans commission qui connecte automobilistes et voisins pour des trajets partagés en zone rurale. Aude &amp; Ariège.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF9F4;
+    --charcoal:#2D2A26;
+    --orange:#FF6B35;
+    --sage:#4CAF7D;
+    --amber:#FFB347;
+    --bg:var(--cream);
+    --text:var(--charcoal);
+    --text-soft:#5C574F;
+    --surface:#FFFFFF;
+    --line:rgba(45,42,38,0.12);
+    --max:1120px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#211E1A;
+      --text:#F6F1E9;
+      --text-soft:#C9C2B6;
+      --surface:#2A2622;
+      --line:rgba(246,241,233,0.14);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#211E1A;
+    --text:#F6F1E9;
+    --text-soft:#C9C2B6;
+    --surface:#2A2622;
+    --line:rgba(246,241,233,0.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Nunito',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;}
+  h1,h2,h3{font-family:'Nunito',sans-serif;font-weight:800;line-height:1.12;margin:0;letter-spacing:-0.01em;}
+  h1{font-size:clamp(2.4rem,5.5vw,3.8rem);}
+  h2{font-size:clamp(1.7rem,3.4vw,2.4rem);}
+  h3{font-size:1.15rem;font-weight:700;}
+  p{margin:0;color:var(--text-soft);}
+  .tagline{
+    font-family:'Caveat',cursive;
+    font-weight:600;
+    font-size:clamp(1.4rem,2.4vw,1.9rem);
+    color:var(--orange);
+    line-height:1.2;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:13px 26px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.98rem;
+    text-decoration:none;
+    border:2px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px;}
+  .btn-primary{background:var(--orange);color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,107,53,0.32);}
+  .btn-ghost{background:transparent;color:var(--text);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
+
+  /* Nav */
+  header{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:var(--max);margin:0 auto;}
+  .logo{font-size:1.35rem;font-weight:800;text-decoration:none;letter-spacing:-0.01em;}
+  .logo span{color:var(--orange);}
+  .navlinks{display:flex;gap:28px;align-items:center;}
+  .navlinks a{text-decoration:none;font-weight:700;font-size:0.95rem;color:var(--text-soft);}
+  .navlinks a:hover{color:var(--orange);}
+  .nav-cta{display:none;}
+  @media (min-width:760px){.nav-cta{display:inline-flex;}}
+  @media (max-width:759px){.navlinks a:not(.nav-mobile-hide){display:none;}}
+
+  /* Hero */
+  .hero{padding:72px 0 40px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center;}
+  @media (min-width:860px){.hero-grid{grid-template-columns:1.05fr 0.85fr;}}
+  .hero-copy p.lede{font-size:1.15rem;color:var(--text-soft);margin-top:18px;max-width:46ch;}
+  .hero-copy .tagline{display:block;margin-top:6px;}
+  .hero-cta{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+  .hero-art{width:100%;}
+  .hero-stats{display:flex;gap:28px;margin-top:38px;flex-wrap:wrap;}
+  .hero-stats div{min-width:120px;}
+  .hero-stats strong{display:block;font-size:1.5rem;font-weight:800;color:var(--sage);}
+  .hero-stats span{font-size:0.88rem;color:var(--text-soft);}
+
+  /* Road divider */
+  .road{width:100%;height:64px;margin:8px 0;}
+  .road path{stroke:var(--sage);stroke-width:3;fill:none;stroke-dasharray:2 14;stroke-linecap:round;}
+
+  section{padding:64px 0;}
+  .section-head{max-width:56ch;margin-bottom:44px;}
+  .section-head p{margin-top:12px;font-size:1.05rem;}
+
+  /* Steps (sequence — numbered) */
+  .steps{display:grid;gap:28px;}
+  @media (min-width:760px){.steps{grid-template-columns:repeat(3,1fr);}}
+  .step{position:relative;padding:28px 24px 24px;background:var(--surface);border:1px solid var(--line);border-radius:18px;}
+  .step .num{
+    font-family:'Nunito',sans-serif;font-weight:800;font-size:2.1rem;
+    color:var(--orange);opacity:0.28;line-height:1;margin-bottom:10px;
+  }
+  .step h3{margin-bottom:8px;}
+  .step p{font-size:0.97rem;}
+
+  /* Pourquoi — alternating rows */
+  .why-row{display:grid;gap:20px;align-items:center;padding:26px 0;border-top:1px solid var(--line);}
+  .why-row:last-child{border-bottom:1px solid var(--line);}
+  @media (min-width:760px){.why-row{grid-template-columns:220px 1fr;}}
+  .why-row .mark{
+    width:52px;height:52px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;
+  }
+  .why-row:nth-child(1) .mark{background:rgba(255,107,53,0.14);}
+  .why-row:nth-child(2) .mark{background:rgba(76,175,125,0.16);}
+  .why-row:nth-child(3) .mark{background:rgba(255,179,71,0.22);}
+  .why-row:nth-child(4) .mark{background:rgba(255,107,53,0.14);}
+  .why-row-title{display:flex;align-items:center;gap:14px;}
+  .why-row h3{font-size:1.15rem;}
+  .why-row .body p{font-size:1rem;}
+
+  /* Ambassadeurs */
+  .amb{
+    background:var(--charcoal);
+    color:var(--cream);
+    border-radius:28px;
+    padding:52px 32px;
+    position:relative;
+    overflow:hidden;
+  }
+  .amb .grain{position:absolute;inset:0;opacity:0.05;background:repeating-linear-gradient(115deg,#fff 0 2px,transparent 2px 6px);}
+  .amb-grid{display:grid;gap:36px;position:relative;}
+  @media (min-width:860px){.amb-grid{grid-template-columns:0.9fr 1.1fr;align-items:center;}}
+  .amb-num{font-size:clamp(4.5rem,11vw,7.5rem);font-weight:800;line-height:0.85;color:var(--amber);}
+  .amb-num-label{font-family:'Caveat',cursive;font-weight:600;font-size:1.5rem;color:var(--cream);margin-top:4px;}
+  .amb h2{color:var(--cream);margin-bottom:14px;}
+  .amb p{color:#D9D3C6;font-size:1.03rem;max-width:52ch;}
+  .amb-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px;}
+  .amb-list li{display:flex;gap:10px;font-size:0.98rem;color:#EDE8DC;}
+  .amb-list li::before{content:"—";color:var(--orange);flex-shrink:0;}
+  .amb .btn-primary{margin-top:26px;}
+
+  /* Zones */
+  .zones{display:grid;gap:20px;}
+  @media (min-width:640px){.zones{grid-template-columns:1fr 1fr;}}
+  .zone-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;}
+  .zone-card h3{margin-bottom:4px;}
+  .zone-card .zone-sub{font-size:0.88rem;color:var(--sage);font-weight:700;margin-bottom:10px;display:block;}
+  .zone-card p{font-size:0.96rem;}
+
+  /* Collectivités */
+  .partner{
+    display:grid;gap:26px;
+    border:1px dashed var(--line);
+    border-radius:20px;
+    padding:36px 28px;
+    align-items:center;
+  }
+  @media (min-width:760px){.partner{grid-template-columns:1fr auto;}}
+  .partner p{font-size:1rem;max-width:56ch;}
+
+  /* Final CTA */
+  .final{text-align:center;}
+  .final h2{max-width:24ch;margin:0 auto 14px;}
+  .final .tagline{display:block;margin-bottom:26px;}
+  .final-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  footer{border-top:1px solid var(--line);padding:36px 0;}
+  .foot-grid{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap;}
+  .foot-links a{font-size:0.9rem;text-decoration:none;color:var(--text-soft);}
+  .foot-links a:hover{color:var(--orange);}
+  .foot-copy{font-size:0.85rem;color:var(--text-soft);}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo">Ze<span>Pouce</span></a>
+    <div class="navlinks">
+      <a href="#comment-ca-marche">Comment ça marche</a>
+      <a href="#ambassadeurs">Ambassadeurs</a>
+      <a href="#collectivites" class="nav-mobile-hide">Collectivités</a>
+    </div>
+    <a href="#telecharger" class="btn btn-primary nav-cta">Télécharger l'app</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>La mobilité entre voisins.</h1>
+        <span class="tagline">Chaque trajet compte, chaque geste aide.</span>
+        <p class="lede">ZePouce met en relation automobilistes et voisins qui vont dans la même direction, sans commission, sans friction. Pensée pour les territoires ruraux, où la voiture reste souvent le seul moyen d'aller travailler, étudier ou simplement bouger.</p>
+        <div class="hero-cta">
+          <a href="#telecharger" class="btn btn-primary">Télécharger l'app</a>
+          <a href="#ambassadeurs" class="btn btn-ghost">Devenir ambassadeur</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>0%</strong><span>de commission, toujours</span></div>
+          <div><strong>Aude · Ariège</strong><span>zones de lancement</span></div>
+        </div>
+      </div>
+      <svg class="hero-art" viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration d'une route de campagne sinueuse">
+        <path d="M210 20 C 260 70, 150 110, 210 160 C 270 210, 150 250, 210 300 C 250 330, 230 355, 210 370" fill="none" stroke="var(--sage)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M210 20 C 260 70, 150 110, 210 160 C 270 210, 150 250, 210 300 C 250 330, 230 355, 210 370" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="4 14" stroke-linecap="round"/>
+        <circle cx="210" cy="20" r="11" fill="var(--orange)"/>
+        <circle cx="210" cy="160" r="8" fill="var(--amber)"/>
+        <circle cx="210" cy="300" r="8" fill="var(--amber)"/>
+        <circle cx="210" cy="370" r="11" fill="var(--orange)"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="comment-ca-marche">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Comment ça marche</h2>
+        <p>Trois étapes, aucune complication.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Indique où tu vas</h3>
+          <p>Que tu cherches un trajet ou que tu proposes le tien, renseigne ton point de départ et ta destination.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Trouve ou sois trouvé</h3>
+          <p>ZePouce rapproche les trajets compatibles dans ta zone. Consulte les profils et les horaires proposés.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Contactez-vous, roulez</h3>
+          <p>Discutez directement dans l'app pour vous mettre d'accord, puis partez. Aucune commission ne change de main.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="road" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 20 C 250 0, 500 40, 750 20 C 850 12, 950 25, 1000 20"/>
+  </svg>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Pourquoi ZePouce</h2>
+      </div>
+      <div class="why-list">
+        <div class="why-row">
+          <div class="why-row-title"><div class="mark">🤝</div><h3>Zéro commission</h3></div>
+          <div class="body"><p>ZePouce ne prélève rien sur vos trajets. L'app reste gratuite pour les conducteurs comme pour les passagers, aujourd'hui et demain.</p></div>
+        </div>
+        <div class="why-row">
+          <div class="why-row-title"><div class="mark">🌾</div><h3>Pensée pour la campagne</h3></div>
+          <div class="body"><p>Les applis de covoiturage classiques marchent bien entre grandes villes. ZePouce est construite pour les trajets du quotidien entre villages, hameaux et bourgs-centres.</p></div>
+        </div>
+        <div class="why-row">
+          <div class="why-row-title"><div class="mark">📍</div><h3>Des lieux sûrs et repérés</h3></div>
+          <div class="body"><p>Retrouvez des spots identifiés par la communauté pour attendre en sécurité, en complément des trajets organisés.</p></div>
+        </div>
+        <div class="why-row">
+          <div class="why-row-title"><div class="mark">💬</div><h3>Une vraie communauté locale</h3></div>
+          <div class="body"><p>Chaque trajet partagé rapproche deux voisins. ZePouce grandit avec les gens qui l'utilisent, pas contre eux.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ambassadeurs">
+    <div class="wrap">
+      <div class="amb">
+        <div class="grain"></div>
+        <div class="amb-grid">
+          <div>
+            <div class="amb-num">100</div>
+            <div class="amb-num-label">premiers utilisateurs</div>
+          </div>
+          <div>
+            <h2>Devenez ambassadeur ZePouce</h2>
+            <p>Les 100 premières personnes qui rejoignent ZePouce font partie de son histoire. On construit cette app avec vous, pas seulement pour vous.</p>
+            <ul class="amb-list">
+              <li>Accès prioritaire aux nouvelles fonctionnalités avant leur sortie</li>
+              <li>Ligne directe avec l'équipe pour faire remonter vos retours</li>
+              <li>Une place dans le récit de lancement de ZePouce, si vous le souhaitez</li>
+            </ul>
+            <a href="#telecharger" class="btn btn-primary">Rejoindre les 100</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Là où ZePouce roule déjà</h2>
+        <p>Le lancement démarre dans deux départements. La suite dépendra de vous.</p>
+      </div>
+      <div class="zones">
+        <div class="zone-card">
+          <span class="zone-sub">Occitanie</span>
+          <h3>Aude</h3>
+          <p>Un territoire rural où la voiture reste souvent indispensable pour rejoindre le travail, les études ou les services du quotidien.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-sub">Occitanie</span>
+          <h3>Ariège</h3>
+          <p>Des villages dispersés, un réseau de transport en commun limité : exactement le terrain pour lequel ZePouce a été pensée.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collectivites">
+    <div class="wrap">
+      <div class="partner">
+        <div>
+          <h2 style="font-size:1.5rem;">Vous représentez une collectivité ?</h2>
+          <p>ZePouce propose des expérimentations de mobilité locale pour les communautés de communes et collectivités rurales : spots identifiés, suivi d'usage, accompagnement terrain.</p>
+        </div>
+        <a href="mailto:contact@zepouce.fr?subject=ZePouce%20—%20Collectivité" class="btn btn-ghost">Nous contacter</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="telecharger" class="final">
+    <div class="wrap">
+      <h2>Prêt à partager la route ?</h2>
+      <span class="tagline">Chaque trajet compte, chaque geste aide.</span>
+      <div class="final-cta">
+        <a href="https://play.google.com/store/apps/details?id=com.mycompany.stopsur" class="btn btn-primary">Télécharger sur Google Play</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <span class="foot-copy">© <span id="year"></span> ZePouce</span>
+    <div class="foot-links">
+      <a href="https://zepouce.github.io/legal/cgu.html">CGU</a>
+      <a href="https://zepouce.github.io/legal/politique-confidentialite.html">Politique de confidentialité</a>
+      <a href="mailto:contact@zepouce.fr">contact@zepouce.fr</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
 </html>
